@@ -5,41 +5,41 @@ const questions = {
     children: ['home', 'hang-out']
   },
   'home': {
-    key: 'Stay home',
+    key: 'Stay home?',
     children: ['watch-movie', 'tv-show', 'cook', 'play-music']
   },
   'hang-out': {
-    key: 'Hang out with friends',
+    key: 'Hang out with friends?',
     children: ['cinema', 'drink', 'restaurant']
   },
 
   'watch-movie': {
-    key: 'Watch a movie',
+    key: 'Watch a movie?',
     children: ['romantic', 'scary', 'action', 'comedy']
   },
   'tv-show': {
-    key: 'Watch a TV show',
+    key: 'Watch a TV show?',
     children: ['drama', 'sport', 'comedy-tv']
   },
   'cook': {
-    key: 'Cook a meal',
+    key: 'Cook a meal?',
     children: ['spicy', 'traditional']
   },
   'play-music': {
-    key: 'Play a song',
+    key: 'Play a song?',
     children: ['rap', 'rnb']
   },
 
   'cinema': {
-    key: 'Go to the cinema',
+    key: 'Go to the cinema?',
     children: ['romantic-cine', 'scary-cine']
   },
   'drink': {
-    key: 'Have a drink',
+    key: 'Have a drink?',
     children: ['beer', 'whiskey']
   },
   'restaurant': {
-    key: 'Visit a restaurant',
+    key: 'Visit a restaurant?',
     children: ['italian', 'bbq']
   },
 
@@ -168,7 +168,7 @@ const renderQuestion = (nodes) => {
 	// Remove the previous answer.
 	answer.innerHTML = '';
 	nodes.forEach(node => {
-    answer.innerHTML += `<li><p onClick="choose('${node.id}')" class="answer">${node.key}</p></li>`;
+    answer.innerHTML += `<tr><td><li><p onClick="choose('${node.id}')" class="answer">${node.key}</p></li</td></tr>`;
 	});
 };
 
