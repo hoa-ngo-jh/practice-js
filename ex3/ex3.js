@@ -6,7 +6,7 @@ const questions = {
   },
   'home': {
     key: 'Stay home',
-    children: ['watch-movie', 'tv-show', 'cook']
+    children: ['watch-movie', 'tv-show', 'cook', 'play-music']
   },
   'hang-out': {
     key: 'Hang out with friends',
@@ -24,6 +24,10 @@ const questions = {
   'cook': {
     key: 'Cook a meal',
     children: ['spicy', 'traditional']
+  },
+  'play-music': {
+    key: 'Play a song',
+    children: ['rap', 'rnb']
   },
 
   'cinema': {
@@ -67,6 +71,13 @@ const questions = {
   },
   'traditional': {
     key: 'Rice, noddle, pasta,...'
+  },
+
+  'rap': {
+    key: 'Post Malone, Kendrick Lamar, Travis Scott,...'
+  },
+  'rnb': {
+    key: 'Justin Bieber, Justin Timberlake, Chris Brown,...'
   },
   
   'romantic-cine': {
