@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decision Tree</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      line-height: 3rem;
+    }
+
+    #choices li {
+      list-style: none;
+      color: blue;
+    }
+
+    p {
+      cursor: pointer;
+    }
+
+    #back {
+      padding: 10px 30px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="quizz"></h1> 
+
+    <ul id="choices"></ul>
+    <button id="back">Back</button>
+  </div>
+
+  <script src="ex3.js"></script>
+</body>
+</html>
