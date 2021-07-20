@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <title>Carousel</title>
+</head>
+<body>
+  <h1 style="font-family: sans-serif; text-align: center; padding: 20px 0;">Carousel</h1>
+
+  <div class="carousel-container">
+    <i class="fas fa-arrow-left" id="prevBtn"></i>
+    <i class="fas fa-arrow-right" id="nextBtn"></i>
+
+    <div class="carousel-slide">
+      <img src="/img/carousel5.jpeg" id="lastClone" alt="carousel image">
+      <img src="/img/carousel1.jpeg" alt="carousel image">
+      <img src="/img/carousel2.jpeg" alt="carousel image">
+      <img src="/img/carousel3.jpeg" alt="carousel image">
+      <img src="/img/carousel4.jpeg" alt="carousel image">
+      <img src="/img/carousel5.jpeg" alt="carousel image">
+      <img src="/img/carousel1.jpeg" id="firstClone" alt="carousel image">
+    </div>
+  </div>
+
+  <div class="dot-container">
+    <span class="dot active" onclick="changeSlideByDot(1)"></span>
+    <span class="dot" onclick="changeSlideByDot(2)"></span>
+    <span class="dot" onclick="changeSlideByDot(3)"></span>
+    <span class="dot" onclick="changeSlideByDot(4)"></span>
+    <span class="dot" onclick="changeSlideByDot(5)"></span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
