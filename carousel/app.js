@@ -4,10 +4,10 @@ const carouselImages = document.querySelectorAll('.carousel-slide img');
 // Buttons
 const prevBtn = document.querySelector('#prevBtn');
 const nextBtn = document.querySelector('#nextBtn');
-const dots = document.querySelectorAll('.dot');
+const dotsContainer = document.querySelector('#my-dot');
 
 let counter = 1;
-const size = carouselImages[0].clientWidth;
+const size = carouselImages[0].clientWidth + 1;
 
 carouselSlide.style.transform = `translateX(${(-size * counter)}px)`;
 
@@ -39,6 +39,18 @@ carouselSlide.addEventListener('transitionend', () => {
     changeSlideWithoutAnimation();
   }
 });
+
+function createDot() {
+  for (let i = 0; i < carouselImages.length - 2; i++) {
+    if (i != 0) {
+      dotsContainer.innerHTML += `<span class="dot" onclick="changeSlideByDot(${i + 1})"></span> `;
+    } else {
+      dotsContainer.innerHTML += `<span class="dot active" onclick="changeSlideByDot(${i + 1})"></span> `;
+    }
+  }
+}
+createDot();
+const dots = document.querySelectorAll('.dot');
 
 function changeSlide() {
   carouselSlide.style.transition = 'transform 0.4s ease-in-out';

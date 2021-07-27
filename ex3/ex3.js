@@ -1,114 +1,3 @@
-/* QUESTIONS */
-const questions = {
-  'root': {
-    key: `Let't Start`,
-    children: ['home', 'hang-out']
-  },
-  'home': {
-    key: 'Stay home?',
-    children: ['watch-movie', 'tv-show', 'cook', 'play-music']
-  },
-  'hang-out': {
-    key: 'Hang out with friends?',
-    children: ['cinema', 'drink', 'restaurant']
-  },
-
-  'watch-movie': {
-    key: 'Watch a movie?',
-    children: ['romantic', 'scary', 'action', 'comedy']
-  },
-  'tv-show': {
-    key: 'Watch a TV show?',
-    children: ['drama', 'sport', 'comedy-tv']
-  },
-  'cook': {
-    key: 'Cook a meal?',
-    children: ['spicy', 'traditional']
-  },
-  'play-music': {
-    key: 'Play a song?',
-    children: ['rap', 'rnb']
-  },
-
-  'cinema': {
-    key: 'Go to the cinema?',
-    children: ['romantic-cine', 'scary-cine']
-  },
-  'drink': {
-    key: 'Have a drink?',
-    children: ['beer', 'whiskey']
-  },
-  'restaurant': {
-    key: 'Visit a restaurant?',
-    children: ['italian', 'bbq']
-  },
-
-  'romantic': {
-    key: 'Notebook'
-  },
-  'scary': {
-    key: 'Insidious'
-  },
-  'action': {
-    key: 'Fast and furious 9'
-  },
-  'comedy': {
-    key: 'Mr.Bean'
-  },
-  
-  'drama': {
-    key: 'Penhouse'
-  },
-  'sport': {
-    key: 'Premier League'
-  },
-  'comedy-tv': {
-    key: 'Running Man'
-  },
-  
-  'spicy': {
-    key: 'Tokbokki, noddle, peppers with pizza, chicken fire,...'
-  },
-  'traditional': {
-    key: 'Rice, noddle, pasta,...'
-  },
-
-  'rap': {
-    key: 'Post Malone, Kendrick Lamar, Travis Scott,...'
-  },
-  'rnb': {
-    key: 'Justin Bieber, Justin Timberlake, Chris Brown,...'
-  },
-  
-  'romantic-cine': {
-    key: 'How I Met Your Mother'
-  },
-  'scary-cine': {
-    key: 'Covering our faces'
-  },
-  
-  'beer': {
-    key: 'Pisswasser'
-  },
-  'whiskey': {
-    key: 'Black Bush'
-  },
-  
-  'italian': {
-    key: 'Spag bol'
-  },
-  'bbq': {
-    key: 'Meat in a bap'
-  }
-};
-
-// Selecting elements
-let question = document.getElementById('quizz');
-let answer = document.getElementById('choices');
-let btnBack = document.getElementById('back');
-
-let tree, currId;
-
 function DecisionTree(questions) {
   this.questions = questions;
 
@@ -161,45 +50,169 @@ function DecisionTree(questions) {
 
 };
 
-const renderQuestion = (nodes) => {
-	let quizz = tree.getParent(nodes[0].parent).key;
-	question.textContent = quizz;
+(function() {
+  /* QUESTIONS */
+  const questions = {
+    'root': {
+      key: `Let't Start`,
+      children: ['home', 'hang-out']
+    },
+    'home': {
+      key: 'Stay home?',
+      children: ['watch-movie', 'tv-show', 'cook', 'play-music']
+    },
+    'hang-out': {
+      key: 'Hang out with friends?',
+      children: ['cinema', 'drink', 'restaurant']
+    },
 
-	// Remove the previous answer.
-	answer.innerHTML = '';
-	nodes.forEach(node => {
-    answer.innerHTML += `<tr><td><li><p onClick="choose('${node.id}')" class="answer">${node.key}</p></li</td></tr>`;
-	});
-};
+    'watch-movie': {
+      key: 'Watch a movie?',
+      children: ['romantic', 'scary', 'action', 'comedy']
+    },
+    'tv-show': {
+      key: 'Watch a TV show?',
+      children: ['drama', 'sport', 'comedy-tv']
+    },
+    'cook': {
+      key: 'Cook a meal?',
+      children: ['spicy', 'traditional']
+    },
+    'play-music': {
+      key: 'Play a song?',
+      children: ['rap', 'rnb']
+    },
 
-function start() {
-  tree = new DecisionTree(questions);
-  let rootQuestion = tree.init();
-  currId = null;
+    'cinema': {
+      key: 'Go to the cinema?',
+      children: ['romantic-cine', 'scary-cine']
+    },
+    'drink': {
+      key: 'Have a drink?',
+      children: ['beer', 'whiskey']
+    },
+    'restaurant': {
+      key: 'Visit a restaurant?',
+      children: ['italian', 'bbq']
+    },
 
-  tree.setParents();
-  renderQuestion(rootQuestion);
-};
+    'romantic': {
+      key: 'Notebook'
+    },
+    'scary': {
+      key: 'Insidious'
+    },
+    'action': {
+      key: 'Fast and furious 9'
+    },
+    'comedy': {
+      key: 'Mr.Bean'
+    },
+    
+    'drama': {
+      key: 'Penhouse'
+    },
+    'sport': {
+      key: 'Premier League'
+    },
+    'comedy-tv': {
+      key: 'Running Man'
+    },
+    
+    'spicy': {
+      key: 'Tokbokki, noddle, peppers with pizza, chicken fire,...'
+    },
+    'traditional': {
+      key: 'Rice, noddle, pasta,...'
+    },
 
-start();
+    'rap': {
+      key: 'Post Malone, Kendrick Lamar, Travis Scott,...'
+    },
+    'rnb': {
+      key: 'Justin Bieber, Justin Timberlake, Chris Brown,...'
+    },
+    
+    'romantic-cine': {
+      key: 'How I Met Your Mother'
+    },
+    'scary-cine': {
+      key: 'Covering our faces'
+    },
+    
+    'beer': {
+      key: 'Pisswasser'
+    },
+    'whiskey': {
+      key: 'Black Bush'
+    },
+    
+    'italian': {
+      key: 'Spag bol'
+    },
+    'bbq': {
+      key: 'Meat in a bap'
+    }
+  };
 
-// Click a answer
-const choose = (id) => {
-  let child = tree.getChildNode(id);
+  // Selecting elements
+  const question = document.getElementById('quizz');
+  let answer = document.getElementById('choices');
+  let btnBack = document.getElementById('back');
 
-  if (child) {
-    currId = id;
-    renderQuestion(child);
-  }
-};
+  let tree, currId;
 
-// Back to the previos question
-btnBack.addEventListener('click', () => {
-  if (!currId) return false;
+  const toggleBackBtn = () => {
+    if (!currId || currId == 'root') {
+      btnBack.classList.add('hidden');
+    } else {
+      btnBack.classList.remove('hidden');
+    }
+  };
 
-  let pr = tree.getParent(currId);
-  if (currId !== 'root') {
-    currId = pr.parent;
-    renderQuestion(tree.getChildNode(currId));
-  }
-});
+  const renderQuestion = (nodes) => {
+    let quizz = tree.getParent(nodes[0].parent).key;
+    question.textContent = quizz;
+
+    // Remove the previous answer.
+    answer.innerHTML = '';
+    toggleBackBtn();
+    nodes.forEach(node => {
+      answer.innerHTML += `<tr><td><li><p choice="${node.id}" class="answer">${node.key}</p></li</td></tr>`;
+    });
+  };
+
+  function start() {
+    tree = new DecisionTree(questions);
+    let rootQuestion = tree.init();
+    currId = null;
+
+    tree.setParents();
+    renderQuestion(rootQuestion);
+  };
+  start();
+
+  document.addEventListener('click', (e) => {
+    let answer = e.target;
+
+    if (answer.classList == 'answer') {
+      let child = tree.getChildNode(answer.getAttribute('choice'));
+
+      if (child) {
+        currId = answer.getAttribute('choice');
+        renderQuestion(child);
+      }
+    }
+  });
+
+  // Back to the previos question
+  btnBack.addEventListener('click', () => {
+    if (!currId) return false;
+
+    let pr = tree.getParent(currId);
+    if (currId !== 'root') {
+      currId = pr.parent;
+      renderQuestion(tree.getChildNode(currId));
+    }
+  });
+})();

@@ -1,27 +1,20 @@
 //Ex 2: Given an array of integers, find integers with the most repetitions. If multiple numbers have the same maximum number of repetition, export all of them.  Maximum 3 rounds, not nested.
 
-const arr = [3, 1, 8, 1, 2, 3, 4, 8, 5, 3, 3, 1, 5, 1, 2, 3, 4, 5, 5, 3];
+const arr = [3, 1, 8, 1, 2, 3, 4, 8, 5, 3, 3, 1, 5, 1, 2, 3, 4, 5, 5, 3, 5, 5];
 
-const findMostRepetitions = (arr) => {
-  let map = new Map();
-  let max = 0;
-  let result = [];
+const findMostRepetitions = (arr) => arr.reduce((acc, item) => {
+  acc.countList[item] = acc.countList[item] + 1 || 1;
   
-  arr.forEach(item => {
-    // if item exist -> increase count
-    let count = map.get(item) + 1 || 1;
-    map.set(item, count);
+  if (acc.max <= acc.countList[item]) {
+    if (acc.max !== acc.countList[item]) {
+      acc.result.length = 0;
+    }
 
-    // find the most repetition
-    if (max < map.get(item)) max = map.get(item);
-  });
-
-  // get integers with the most repetitions
-  for (let [nu, count] of map) {
-    if (count === max) result.push(nu);
+    acc.max = acc.countList[item];
+    acc.result.push(item);
   }
 
-  return result;
-};
+  return acc;
+}, { max: 0, countList: {}, result: [] }).result;
 
 console.log(findMostRepetitions(arr));

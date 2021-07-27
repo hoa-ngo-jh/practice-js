@@ -19,6 +19,15 @@ const rmvDuplElement2 = (arr) => {
 // Using filter method
 const rmvDuplElement3 = (arr) => {
   return arr.filter((item, index) => arr.indexOf(item) === index);
-}
+};
 
-console.log(rmvDuplElement3(arr));
+const rmvDuplElement4 = (arr) => [...new Map(arr.map(item => [item, item])).values()];
+
+const rmvDuplElement5 = (arr) => {
+  let result = {};
+  arr.forEach(item => result[item] = null);
+
+  return Object.keys(result);
+};
+
+console.log(rmvDuplElement5(arr));
