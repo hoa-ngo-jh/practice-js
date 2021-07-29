@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Facebook</title>
+</head>
+<body>
+  <div class="container">
+    <div class="cover-place">
+      
+      <div class="cover-photo"></div>
+
+      <div class="range-wrap">
+        <input id="range" type="range" min="0" max="50" value="0" step="1">
+      </div>
+
+      <div class="cover-save">
+        <button class="btn cancel-btn">Cancel</button>
+        <button class="btn save-btn">Save Change</button>
+      </div>
+
+      <div class="cover-upload">
+        <button class="btn upload-btn">
+          <i class="fas fa-camera"></i>
+          Edit Cover Photo
+        </button>
+        <input type="file" class="cover-file">
+      </div>
+    </div>
+
+    <div class="avatar">
+      <img src="https://www.geo.tv/assets/uploads/updates/2021-04-02/342868_1535578_updates.jpg" alt="avatar">
+      <p class="name">Justin Bieber</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
