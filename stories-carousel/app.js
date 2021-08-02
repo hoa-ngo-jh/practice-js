@@ -6,16 +6,19 @@ const data = [
       {
         id: 1,
         type: 'img',
+        time: 3,
         src: 'https://www.hollywoodreporter.com/wp-content/uploads/2013/11/9713_01_0270.jpg'
       },
       {
         id: 2,
         type: 'img',
+        time: 3,
         src: 'https://media.vov.vn/sites/default/files/styles/large/public/2020-09/j1_3.jpg'
       },
       {
         id: 3,
         type: 'video',
+        time: 7,
         src: '/img/story1.mp4'
       }
     ]
@@ -27,11 +30,13 @@ const data = [
       {
         id: 1,
         type: 'img',
+        time: 3,
         src: 'https://dep.com.vn/wp-content/uploads/2020/01/taylor-swift-1.jpg'
       },
       {
         id: 2,
         type: 'video',
+        time: 8,
         src: '/img/story2.mp4'
       }
     ]
@@ -43,6 +48,7 @@ const data = [
       {
         id: 1,
         type: 'img',
+        time: 3,
         src: 'https://edgar.ae/media/images/RRxBM-L5-1-Vertical-PR.original.jpg'
       }
     ]
@@ -54,16 +60,19 @@ const data = [
       {
         id: 1,
         type: 'img',
+        time: 3,
         src: 'https://kenh14cdn.com/203336854389633024/2021/6/10/s3-1623317175420236873065.jpeg'
       },
       {
         id: 2,
         type: 'video',
+        time: 8,
         src: '/img/story3.mp4'
       },
       {
         id: 3,
         type: 'img',
+        time: 3,
         src: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/selena-gomez-seen-on-the-set-of-only-murders-in-the-news-photo-1614265382.'
       }
     ]
@@ -75,16 +84,19 @@ const data = [
       {
         id: 1,
         type: 'img',
+        time: 3,
         src: 'https://i.pinimg.com/originals/3e/93/a3/3e93a34c733186a98874f787b94264a6.jpg'
       },
       {
         id: 2,
         type: 'video',
+        time: 12,
         src: '/img/story4.mp4'
       },
       {
         id: 3,
         type: 'img',
+        time: 3,
         src: 'https://i.pinimg.com/originals/cd/c0/d2/cdc0d2d579d31b9b25d48d6a16045113.jpg'
       }
     ]
@@ -96,11 +108,9 @@ const stories = document.querySelector('.stories-slider');
 const content = document.querySelector('.story-content');
 const list = document.querySelector('.list-user');
 
-// PROGRESS LINE
 const progressContainer = document.querySelector('.progress-container');
 let currProgressLine, currChildElementCount;
 
-// ---------
 const renderListUser = (data) => {
   for (let i = 0; i < data.length; i++) {
     list.innerHTML += `
@@ -112,11 +122,11 @@ const renderListUser = (data) => {
         </li>
       </ul>
     `
-
     stories.innerHTML += `
       <div class="user">
         <div class="stories-bar">
           <div class="progress-container">
+            ${data[i].contents.map(item => `<div style="animation-duration: ${item.time}s" class="progress prg-${i + 1}"></div>`).join('')}
           </div>
           <div class="user-detail">
             <div class="user-info">
@@ -129,7 +139,6 @@ const renderListUser = (data) => {
           ${data[i].contents.map(item => {
             let html = item.type === 'img' ? `<img id="${item.id}" src="${item.src}" alt="story image"></img>` : `<video id="${item.id}" width="500" height="900" muted loop src="${item.src}" type="video/mp4"></video>`; 
             return html;
-            // return `${item.type === 'img' ? `<img id="${item.id}" src="${item.src}" alt="story image"></img>` : `<video id="${item.id}" width="500" height="900" muted loop src="${item.src}" type="video/mp4"></video>`}`;
           }).join('')}
         </div>
       </div>
@@ -143,52 +152,52 @@ const height = stories.clientHeight + 5;
 const width = stories.clientWidth;
 
 let currStory = stories.firstElementChild.lastElementChild.firstElementChild;
-
-const renderProgressLine = () => {
-  currProgressLine = currStory.parentElement.previousElementSibling.firstElementChild;
-  currChildElementCount = currStory.parentElement.childElementCount;
-  // let index = currStory.parentElement.getAttribute('id').charAt(2);
-
-  for (let i = 0; i < currChildElementCount; i++) {
-    currProgressLine.innerHTML += `<div style="animation-duration: 2s" class="progress"></div>`;
-  }
-};
-// renderProgressLine();
-
-const progress = Array.from(document.querySelectorAll(`.progress`));
+let progress = Array.from(document.querySelectorAll(`.prg-${1}`));
+let currentProgressStory = 0, index;
+let prevVideo;
 
 function playNext(e) {
   const current = e && e.target;
-  let next = progress[0];
 
   if (current) {
-    const currentIndex = progress.indexOf(current);
-    if (currentIndex < progress.length) {
-      next = progress[currentIndex+1];
-    }
     current.classList.remove('active');
     current.classList.add('passed');
     changeStories('next');
   } 
-  
-  // if (!next) {
-  //   progress.map((el) => {
-  //     el.classList.remove('active');
-  //     el.classList.remove('passed');
-  //   })
-  //   console.log(next);
-  //   next = progress[0];
-  // } 
-  //next = progress[0];
-  if (next) next.classList.add('active'); 
 }
 
-// playNext();
-progress.map(el => {
-  el.addEventListener("animationend", playNext, false);
-});
+const play = () => {
+  progress[currentProgressStory].classList.add('active');
+  progress.map((el) => {
+    el.addEventListener("animationend", playNext, false);
+  });
+};
+play();
 
-let prevVideo;
+const setDefaultProgress = (progress) => {
+  if (progress.classList.contains('passed')) {
+    progress.classList.remove('passed');
+  }
+  if (progress.classList.contains('active')) {
+    progress.classList.remove('active');
+  }
+};
+
+const removePassedProgess = () => {
+  progress.forEach(item => {
+    setDefaultProgress(item);
+  });
+};
+
+const getIndexStoryPassed = () => {
+  for (let i = progress.length - 1; i >= 0; i--) {
+    if (progress[i].classList.contains('passed')) {
+      return i;
+    }
+  }
+
+  return 0;
+};
 
 const changeStoryInUser = (counter, element) => {
   element.style.transform = `translateY(${(-height * counter)}px)`;
@@ -207,10 +216,26 @@ const togglePlayVideo = (newVideo) => {
   }
 };
 
+const toggleActiveStory = (index) => {
+  progress[index].classList.remove('active');
+  progress[index].classList.add('passed');
+};
+
+const changeVideo = () => {
+  if (prevVideo) prevVideo.pause();
+  togglePlayVideo(currStory);
+};
+
 const changeStoriesOnList = (index) => {
+  changeStoryInUser(0, currStory.parentElement);
   currStory = document.getElementById(`st${index + 1}`).firstElementChild;
   changeStoryInUser(0, currStory.parentElement);
   switchStoryUser(index);
+  removePassedProgess();
+  progress = Array.from(document.querySelectorAll(`.prg-${index + 1}`));
+  removePassedProgess();
+  currentProgressStory = 0;
+  play();
 };
   
 const changeStories = (direction) => {
@@ -221,46 +246,66 @@ const changeStories = (direction) => {
   const existPrevUserStory = story.parentElement.parentElement.previousElementSibling;
 
   if (direction === 'next') {
-    console.log('next');
     if (lastItemInUserStory === story && !existNextUserStory) {
       return;
     } else if (lastItemInUserStory === story && existNextUserStory) {
       currStory = existNextUserStory.lastElementChild.firstElementChild;
-      let index = currStory.parentElement.getAttribute('id').charAt(2);
-      switchStoryUser(index - 1);
+      index = currStory.parentElement.getAttribute('id').charAt(2);
 
-      if (prevVideo) prevVideo.pause();
-      togglePlayVideo(currStory);
+      switchStoryUser(index - 1);
+      toggleActiveStory(currentProgressStory);
+      currentProgressStory = 0;
+      progress = Array.from(document.querySelectorAll(`.prg-${index}`));
+
+      if (progress[0].classList.contains('passed')) {
+        changeStoryInUser(0, currStory.parentElement);
+        removePassedProgess();
+      }
+
+      play();
     } else {
       currStory = story.nextElementSibling;
-      let index = currStory.getAttribute('id');
-      changeStoryInUser(index - 1, currStory.parentElement);
+      index = currStory.getAttribute('id');
 
-      if (prevVideo) prevVideo.pause();
-      togglePlayVideo(currStory);
+      changeStoryInUser(index - 1, currStory.parentElement);
+      currentProgressStory += 1;
+      toggleActiveStory(currentProgressStory - 1);
+      progress[currentProgressStory].classList.add('active');
     }
   } else if (direction === 'prev') {
-    console.log('prev');
     if (firstItemInUserStory === story && !existPrevUserStory) {
       return;
     } else if (firstItemInUserStory === story && existPrevUserStory) {
-      currStory = existPrevUserStory.lastElementChild.lastElementChild;
-      let index = currStory.parentElement.getAttribute('id').charAt(2);
+      index = existPrevUserStory.lastElementChild.getAttribute('id').charAt(2);
       switchStoryUser(index - 1);
+      progress[0].classList.remove('active');
+      progress = Array.from(document.querySelectorAll(`.prg-${index}`));
+      currentProgressStory = getIndexStoryPassed();
 
-      if (prevVideo) prevVideo.pause();
-      togglePlayVideo(currStory);
+      if (currentProgressStory) {
+        currStory = existPrevUserStory.lastElementChild.lastElementChild; 
+        progress[currentProgressStory].classList.remove('passed');
+      } else {
+        currStory = existPrevUserStory.lastElementChild.firstElementChild;
+      }
+
+      play();
     } else {
       currStory = story.previousElementSibling;
-      let index = currStory.getAttribute('id');
+      index = currStory.getAttribute('id');
       changeStoryInUser(index - 1, currStory.parentElement);
-
-      if (prevVideo) prevVideo.pause();
-      togglePlayVideo(currStory);
+      currentProgressStory -= 1;
+      setDefaultProgress(progress[currentProgressStory + 1]);
+      progress[currentProgressStory].classList.remove('passed');
+      progress[currentProgressStory].classList.add('active');
     }
   }
+
+  changeVideo();
 };
 
-stories.addEventListener('click', e => {
+const clickStories = (e) => {
   changeStories(e.clientX > middle_of_story_screen ? 'next' : 'prev')
-});
+};
+
+stories.addEventListener('click', clickStories);

@@ -1,3 +1,13 @@
+:root {
+  --white: #FFFFFF;
+  --white2: #f4f4f4;
+  --autocomplete: #D3D3D3;
+  --light-black: #666666;
+  --gray: #9D9D9D;
+  --green: #9DBFAF;
+  --black: #3a3a3a;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -22,25 +32,25 @@ body {
 
 .searchTerm {
   width: 100%;
-  border: 3px solid #d3d3d3;
+  border: 3px solid var(--autocomplete);
   border-right: none;
   padding: 5px;
   border-radius: 5px 0 0 5px;
   outline: none;
-  color: #9DBFAF;
+  color: var(--green);
 }
 
 .searchTerm:focus{
-  color: #3a3a3a;
+  color: var(--black);
 }
 
 .btn {
   width: 40px;
   height: 36px;
-  border: 1px solid #d3d3d3;
-  background: #9d9d9d;
+  border: 1px solid var(--autocomplete);
+  background: var(--gray);
   text-align: center;
-  color: #ffffff;
+  color: var(--white);
   cursor: pointer;
   font-size: 20px;
 }
@@ -57,8 +67,8 @@ body {
 }
 
 .autocomplete {
-  background-color: #ffffff;
-  border: 3px solid #d3d3d3;
+  background-color: var(--white);
+  border: 3px solid var(--autocomplete);
   display: none;
 }
 
@@ -69,9 +79,9 @@ body {
 .suggest {
   cursor: pointer;
   padding: 10px;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid var(--autocomplete);
 }
 
 .suggest:hover {
-  background-color: #f4f4f4;
+  background-color: var(--white2);
 }

@@ -1,3 +1,11 @@
+:root {
+  --white: #FFFFFF;
+  --black: #000000;
+  --light-black: #666666;
+  --gold: #ffd700;
+  --fuchsia: #ff00ff;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,7 +14,7 @@
 
 body {
   font-family: sans-serif;
-  color: #ffffff;
+  color: var(--white);
 }
 
 .list-user {
@@ -18,6 +26,7 @@ body {
 .list-user ul li a img {
   display: flex;
   height: 50px;
+  object-fit: cover;
   width: 50px;
   border-radius: 100%;
   transition: .6s ease-in-out;
@@ -33,14 +42,14 @@ body {
 
 .list-user ul li a {
   display: block;
-  background-color: #ffffff;
+  background-color: var(--white);
   padding: 2px;
   border-radius: 100%;
 }
 
 .outer-layer {
   position: relative;
-  background: linear-gradient(45deg, gold, fuchsia);
+  background: linear-gradient(45deg, var(--gold), var(--fuchsia));
   padding: 2px;
   border-radius: 100%;
 }
@@ -86,7 +95,7 @@ body {
   );
   background-repeat: no-repeat;
   background-size: 200%;
-  background-color: #666;
+  background-color: var(--light-black);
   background-position: 100% 50%;
   animation-timing-function: linear;
   animation-delay: .2s;
@@ -111,6 +120,7 @@ body {
   vertical-align: middle;
   border-radius: 50%;
   margin-right: 10px;
+  object-fit: cover;
 }
 
 .user-detail {
@@ -125,10 +135,11 @@ body {
 
 .story-content {
   width: 500px;
-  background-color: #000000;
+  background-color: var(--black);
 }
 
 .story-content img {
+  object-fit: cover;
   max-width: 100%;
   height: 900px;
 }
@@ -139,7 +150,7 @@ body {
   top: 50%;
   z-index: 10;
   font-size: 30px;
-  color: #ffffff;
+  color: var(--white);
   cursor: pointer;
   opacity: 0.7;
 }
