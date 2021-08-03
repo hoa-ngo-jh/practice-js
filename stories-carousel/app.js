@@ -133,6 +133,9 @@ const renderListUser = (data) => {
               <img src="${data[i].avatar}" class="avatar" alt="user avatar">
               <span>${data[i].name}</span>
             </div>
+            <div class="tools">
+              <i class="pause-icon pause-${i + 1} fas fa-pause"></i>
+            </div>
           </div>
         </div>
         <div id="st${i + 1}" class="story-content">
@@ -150,10 +153,11 @@ renderListUser(data);
 const middle_of_story_screen = container.offsetLeft + stories.clientWidth / 2;
 const height = stories.clientHeight + 5;
 const width = stories.clientWidth;
+const pauseBtn = Array.from(document.querySelectorAll('.pause-icon'));
 
 let currStory = stories.firstElementChild.lastElementChild.firstElementChild;
 let progress = Array.from(document.querySelectorAll(`.prg-${1}`));
-let currentProgressStory = 0, index;
+let currentProgressStory = 0, prevProgressStory = 0, index, indexUser = 0;
 let prevVideo;
 
 function playNext(e) {
@@ -227,6 +231,8 @@ const changeVideo = () => {
 };
 
 const changeStoriesOnList = (index) => {
+  setStoryRunning(pauseBtn[prevProgressStory]);
+  prevProgressStory = index;
   changeStoryInUser(0, currStory.parentElement);
   currStory = document.getElementById(`st${index + 1}`).firstElementChild;
   changeStoryInUser(0, currStory.parentElement);
@@ -250,12 +256,13 @@ const changeStories = (direction) => {
       return;
     } else if (lastItemInUserStory === story && existNextUserStory) {
       currStory = existNextUserStory.lastElementChild.firstElementChild;
-      index = currStory.parentElement.getAttribute('id').charAt(2);
+      indexUser = currStory.parentElement.getAttribute('id').charAt(2);
 
-      switchStoryUser(index - 1);
+      setStoryRunning(pauseBtn[indexUser - 2]);
+      switchStoryUser(indexUser - 1);
       toggleActiveStory(currentProgressStory);
       currentProgressStory = 0;
-      progress = Array.from(document.querySelectorAll(`.prg-${index}`));
+      progress = Array.from(document.querySelectorAll(`.prg-${indexUser}`));
 
       if (progress[0].classList.contains('passed')) {
         changeStoryInUser(0, currStory.parentElement);
@@ -265,8 +272,10 @@ const changeStories = (direction) => {
       play();
     } else {
       currStory = story.nextElementSibling;
+      indexUser = currStory.parentElement.getAttribute('id').charAt(2);
       index = currStory.getAttribute('id');
 
+      setStoryRunning(pauseBtn[indexUser - 1]);
       changeStoryInUser(index - 1, currStory.parentElement);
       currentProgressStory += 1;
       toggleActiveStory(currentProgressStory - 1);
@@ -276,10 +285,11 @@ const changeStories = (direction) => {
     if (firstItemInUserStory === story && !existPrevUserStory) {
       return;
     } else if (firstItemInUserStory === story && existPrevUserStory) {
-      index = existPrevUserStory.lastElementChild.getAttribute('id').charAt(2);
-      switchStoryUser(index - 1);
+      indexUser = existPrevUserStory.lastElementChild.getAttribute('id').charAt(2);
+      switchStoryUser(indexUser - 1);
+      setStoryRunning(pauseBtn[indexUser]);
       progress[0].classList.remove('active');
-      progress = Array.from(document.querySelectorAll(`.prg-${index}`));
+      progress = Array.from(document.querySelectorAll(`.prg-${indexUser}`));
       currentProgressStory = getIndexStoryPassed();
 
       if (currentProgressStory) {
@@ -292,7 +302,10 @@ const changeStories = (direction) => {
       play();
     } else {
       currStory = story.previousElementSibling;
+      indexUser = currStory.parentElement.getAttribute('id').charAt(2);
       index = currStory.getAttribute('id');
+
+      setStoryRunning(pauseBtn[indexUser - 1]);
       changeStoryInUser(index - 1, currStory.parentElement);
       currentProgressStory -= 1;
       setDefaultProgress(progress[currentProgressStory + 1]);
@@ -300,12 +313,52 @@ const changeStories = (direction) => {
       progress[currentProgressStory].classList.add('active');
     }
   }
-
   changeVideo();
 };
 
 const clickStories = (e) => {
   changeStories(e.clientX > middle_of_story_screen ? 'next' : 'prev')
 };
+
+const pause = (currentPause) => {
+  currentPause.classList.remove('fa-pause');
+  currentPause.classList.add('fa-play');
+  progress[currentProgressStory].style.animationPlayState = 'paused';
+};
+
+const run = (currentPause) => {
+  currentPause.classList.remove('fa-play');
+  currentPause.classList.add('fa-pause');
+  progress[currentProgressStory].style.animationPlayState = 'running';
+};
+
+const setStoryRunning = (currentPause) => {
+  if (currentPause.classList.contains('fa-play')) {
+    run(currentPause);
+  }
+};
+
+const handlePauseStory = (e) => {
+  e.stopPropagation();
+  let currentPause = e.target;
+
+  if (currentPause.classList.contains('fa-pause')) {
+    pause(currentPause);
+
+    if (currStory.nodeName === 'VIDEO') {
+      currStory.pause();
+    }
+  } else {
+    run(currentPause);
+
+    if (currStory.nodeName === 'VIDEO') {
+      currStory.play();
+    }
+  }
+};
+
+pauseBtn.map((el) => {
+  el.addEventListener("click", handlePauseStory);
+});
 
 stories.addEventListener('click', clickStories);

@@ -54,6 +54,19 @@ body {
   border-radius: 100%;
 }
 
+.tools {
+  width: 10px;
+  z-index: 100;
+}
+
+.pause-icon {
+  cursor: pointer;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  right: 5%;
+}
+
 .stories-container {
   position: relative;
   width: 500px;
