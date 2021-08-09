@@ -238,11 +238,9 @@ const changeVideo = () => {
 const changeStoriesOnList = (index) => {
   setStoryRunning(pauseBtn[prevProgressStory]);
   prevProgressStory = index;
-  navigateToNextStory(0, currStory.parentElement);
   currStory = document.getElementById(`st${index + 1}`).firstElementChild;
   navigateToNextStory(0, currStory.parentElement);
   switchStoryUser(index);
-  removePassedProgess();
   progress = Array.from(document.querySelectorAll(`.prg-${index + 1}`));
   removePassedProgess();
   currProgressStory = 0;
