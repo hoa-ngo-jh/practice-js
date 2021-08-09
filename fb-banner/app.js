@@ -46,10 +46,8 @@
   };
 
   const uploadPhoto = (e) => {
-    console.log(e.target.files)
     if (e.target.files.length > 0) {
       let src = URL.createObjectURL(e.target.files[0]);
-      console.log(src);
       coverPhoto.innerHTML = `<img class="photo" src="${src}" alt=""></img>`;
 
       saveOrCancelBtn.style.display = 'block';
@@ -98,7 +96,6 @@
     editBtn.style.display = 'none';
     rangeWrapper.style.display = 'block';
     range.value = rangeValue;
-    console.log(rangeValue);
     coverPhoto.addEventListener('mousedown', mouseDown);
   };
 
