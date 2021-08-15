@@ -1,55 +1,3 @@
-function DecisionTree(questions) {
-  this.questions = questions;
-
-  this.init = () => {
-    let root = this.questions['root'].children;
-    return this.getNodes(root);
-  };
- 
-  this.getNodes = (arrChildId) => {
-    if (!arrChildId) return [];
-    let list = [];
-
-    arrChildId.forEach(id => {
-      let node = this.questions[id];
-      list.push(node);
-    });
-
-    return list; 
-  };
-
-  // Get an array of node children
-  this.getChildNode = (id) => {
-    // Stop when reaching the final questions.
-    if (!('children' in this.questions[id])) return false;
-
-    let childIds = this.questions[id].children;
-    return this.getNodes(childIds);
-  };
-   
-  // Set parent node for each node, except root node
-  this.setParents = () => {
-    for (let id in this.questions) {
-      this.questions[id].id = id;
-      let arrChildNode = this.getChildNode(id);
-
-      for (let i = 0; i < arrChildNode.length; i++) {
-        let child = arrChildNode[i];
-        if (child.parent) {
-          throw `Can't assign parent because it already has parent`;
-        }
-
-        child.parent = id;
-      };
-    }
-  };
-
-  this.getParent = (parentId) => {
-    return this.questions[parentId];
-  };
-
-};
-
 (function() {
   /* QUESTIONS */
   const questions = {
@@ -155,6 +103,58 @@ function DecisionTree(questions) {
     }
   };
 
+  function DecisionTree(questions) {
+    this.questions = questions;
+  
+    this.init = () => {
+      let root = this.questions['root'].children;
+      return this.getNodes(root);
+    };
+   
+    this.getNodes = (arrChildId) => {
+      if (!arrChildId) return [];
+      let list = [];
+  
+      arrChildId.forEach(id => {
+        let node = this.questions[id];
+        list.push(node);
+      });
+  
+      return list; 
+    };
+  
+    // Get an array of node children
+    this.getChildNode = (id) => {
+      // Stop when reaching the final questions.
+      if (!('children' in this.questions[id])) return false;
+  
+      let childIds = this.questions[id].children;
+      return this.getNodes(childIds);
+    };
+     
+    // Set parent node for each node, except root node
+    this.setParents = () => {
+      for (let id in this.questions) {
+        this.questions[id].id = id;
+        let arrChildNode = this.getChildNode(id);
+  
+        for (let i = 0; i < arrChildNode.length; i++) {
+          let child = arrChildNode[i];
+          if (child.parent) {
+            throw `Can't assign parent because it already has parent`;
+          }
+  
+          child.parent = id;
+        };
+      }
+    };
+  
+    this.getParent = (parentId) => {
+      return this.questions[parentId];
+    };
+  
+  };
+
   // Selecting elements
   const question = document.getElementById('quizz');
   let answer = document.getElementById('choices');
@@ -205,7 +205,6 @@ function DecisionTree(questions) {
     }
   });
 
-  // Back to the previos question
   btnBack.addEventListener('click', () => {
     if (!currId) return false;
 
