@@ -1,13 +1,11 @@
 const carouselSlide = document.querySelector('.carousel-slide');
 const carouselImages = document.querySelectorAll('.carousel-slide img');
-
-// Buttons
 const prevBtn = document.querySelector('#prevBtn');
 const nextBtn = document.querySelector('#nextBtn');
 const dotsContainer = document.querySelector('#my-dot');
+const size = carouselImages[0].clientWidth + 1;
 
 let counter = 1;
-const size = carouselImages[0].clientWidth + 1;
 
 carouselSlide.style.transform = `translateX(${(-size * counter)}px)`;
 
@@ -27,17 +25,6 @@ prevBtn.addEventListener('click', () => {
   counter--;
   changeSlide();
   changeDotBackground(oldIndexDot, newIndexDot);
-});
-
-carouselSlide.addEventListener('transitionend', () => {
-  if (carouselImages[counter].id === 'lastClone') {
-    counter = carouselImages.length - 2;
-    changeSlideWithoutAnimation();
-  }
-  if (carouselImages[counter].id === 'firstClone') {
-    counter = carouselImages.length - counter;
-    changeSlideWithoutAnimation();
-  }
 });
 
 function createDot() {
@@ -73,3 +60,16 @@ function changeSlideByDot(newIndexDot) {
   changeSlide();
   changeDotBackground(oldIndexDot, newIndexDot);
 }
+
+function handleSlideTransition() {
+  if (carouselImages[counter].id === 'lastClone') {
+    counter = carouselImages.length - 2;
+  }
+  if (carouselImages[counter].id === 'firstClone') {
+    counter = carouselImages.length - counter;
+  }
+
+  changeSlideWithoutAnimation();
+}
+
+carouselSlide.addEventListener('transitionend', handleSlideTransition);
