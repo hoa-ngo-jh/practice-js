@@ -1,7 +1,7 @@
 :root {
   --white: #FFFFFF;
   --white2: #f4f4f4;
-  --autocomplete: #D3D3D3;
+  --suggestion: #D3D3D3;
   --light-black: #666666;
   --gray: #9D9D9D;
   --green: #9DBFAF;
@@ -30,9 +30,9 @@ body {
   display: flex;
 }
 
-.searchTerm {
+.search-input {
   width: 100%;
-  border: 3px solid var(--autocomplete);
+  border: 3px solid var(--suggestion);
   border-right: none;
   padding: 5px;
   border-radius: 5px 0 0 5px;
@@ -40,14 +40,14 @@ body {
   color: var(--green);
 }
 
-.searchTerm:focus{
+.search-input:focus{
   color: var(--black);
 }
 
 .btn {
   width: 40px;
   height: 36px;
-  border: 1px solid var(--autocomplete);
+  border: 1px solid var(--suggestion);
   background: var(--gray);
   text-align: center;
   color: var(--white);
@@ -66,20 +66,20 @@ body {
   right: 10px;
 }
 
-.autocomplete {
+.suggestion {
   background-color: var(--white);
-  border: 3px solid var(--autocomplete);
+  border: 3px solid var(--suggestion);
   display: none;
 }
 
-.autocomplete.show {
+.suggestion.show {
   display: block;
 }
 
 .suggest {
   cursor: pointer;
   padding: 10px;
-  border-bottom: 1px solid var(--autocomplete);
+  border-bottom: 1px solid var(--suggestion);
 }
 
 .suggest:hover {

@@ -1,19 +1,20 @@
 (function() {
-  const currPositionBtn = document.querySelector('.nowBtn');
-  const search = document.querySelector('.searchTerm');
+  // Edit variable name to make it easier to understand
+  const currentPositionBtn = document.querySelector('.nowBtn');
+  const search = document.querySelector('.search-input');
   const searchBtn = document.querySelector('.fa-search');
-  const autocomplete = document.querySelector('.autocomplete');
+  const suggestion = document.querySelector('.suggestion');
   const features = [];
   const featureIds = [];
 
   let map, marker, draw;
   let timeout = null;
 
-  const myMapBox = () => {
-    let currPosition;
-    let currNamePosition;
+  const mapPosition = () => {
+    let currentPosition;
+    let currentNamePosition;
     let topSearchPosition;
-    const place_type = {
+    const placeType = {
       'country': 4,
       'region': 10,
       'postcode': 10,
@@ -26,24 +27,24 @@
     };
 
     return {
-      setCurrPosition(position) {
-        currPosition = position;
+      setCurrentPosition(position) {
+        currentPosition = position;
       },
 
-      getCurrPosition: function() {
-        return currPosition;
+      getCurrentPosition: function() {
+        return currentPosition;
       },
 
-      setCurrNamePosition(name) {
-        currNamePosition = name;
+      setCurrentNamePosition(name) {
+        currentNamePosition = name;
       },
 
-      getCurrNamePosition: function() {
-        return currNamePosition;
+      getCurrentNamePosition: function() {
+        return currentNamePosition;
       },
 
-      get_plage_type(type) {
-        return place_type[type];
+      getPlaceType(type) {
+        return placeType[type];
       },
 
       setTopSearchPosition(position) {
@@ -56,26 +57,18 @@
     }
   };
 
-  const mapBoxx = myMapBox();
+  const mapBox = mapPosition();
 
-  function setupMap(center) {
-    map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: center,
-      zoom: 15
-    });
-
-    let nav = new mapboxgl.NavigationControl({ showCompass: false });
-    map.addControl(nav, 'top-left');
-
+  const addMarkerToMap = (center) => {
     marker = new mapboxgl.Marker({
       color: "#2980b9",
       draggable: false
     })
     .setLngLat(center)
     .addTo(map);
+  };
 
+  const setupMapboxDraw = () => {
     draw = new MapboxDraw({
       displayControlsDefault: false,
       controls: {
@@ -129,10 +122,23 @@
         },
       ]
     });
+
     map.addControl(draw, 'top-left');
     map.on('draw.create', updateRoute);
     map.on('draw.update', updateRoute);
     map.on('draw.delete', removeRoute);
+  };
+
+  function setupMap(center) {
+    map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center,
+      zoom: 15
+    });
+
+    const nav = new mapboxgl.NavigationControl({ showCompass: false });
+    map.addControl(nav, 'top-left');
 
     map.on('style.load', () => {
       map.on('click', e => {
@@ -140,31 +146,35 @@
         renderInfoCard(coordinates);
       });
     });
+
+    addMarkerToMap(center);
+    setupMapboxDraw();
   }
 
-  const getSuccessPosition = (position) => {
+  // Change function name to make it easier to understand, more meaningful
+  const successPosition = (position) => {
     setupMap([position.coords.longitude, position.coords.latitude]);
-    mapBoxx.setCurrPosition([position.coords.longitude, position.coords.latitude]);
+    mapBox.setCurrentPosition([position.coords.longitude, position.coords.latitude]);
   };
 
-  const getErrorPosition = () => {
+  const errorPosition = () => {
     setupMap([106.7875967, 10.848056]);
   };
 
   const initMap = () => {
     mapboxgl.accessToken = 'pk.eyJ1IjoiaXRpYWxhbmpoIiwiYSI6ImNrcmZxaTcyZjV5eXgydGwzYnljeDdnbDgifQ.MGcqac1k7Juwv2isrUCX3g';
     navigator.geolocation.getCurrentPosition(
-      getSuccessPosition,
-      getErrorPosition,
+      successPosition,
+      errorPosition,
       {
         enableHighAccuracy: true
       });
   };
   initMap();
 
-  const flyToLocation = (location, place_type) => {
-    autocomplete.classList.remove('show');
-    let zoom = mapBoxx.get_plage_type(place_type);
+  const flyToLocation = (location, type) => {
+    suggestion.classList.remove('show');
+    let zoom = mapBox.getPlaceType(type);
     marker.setLngLat(location).addTo(map);
 
     map.flyTo({
@@ -174,21 +184,21 @@
     });
   };
 
-  const fly = (location, place_type, place_name) => {
+  const fly = (location, type, place_name) => {
     search.value = place_name;
-    flyToLocation(location, place_type);
+    flyToLocation(location, type);
   };
 
-  const backToCurrPosition = async () => {
-    if (!mapBoxx.getCurrNamePosition()) {
-      const coordinates = mapBoxx.getCurrPosition(); 
+  const backToCurrentPosition = async () => {
+    if (!mapBox.getCurrentNamePosition()) {
+      const coordinates = mapBox.getCurrentPosition(); 
       const data = await getLocationByCoordinates(coordinates[0], coordinates[1]);
-      mapBoxx.setCurrNamePosition(data.features[0].place_name);
+      mapBox.setCurrentNamePosition(data.features[0].place_name);
     }
 
-    if (mapBoxx.getCurrPosition()) {
-      flyToLocation(mapBoxx.getCurrPosition(), 'poi');
-      search.value = mapBoxx.getCurrNamePosition();
+    if (mapBox.getCurrentPosition()) {
+      flyToLocation(mapBox.getCurrentPosition(), 'poi');
+      search.value = mapBox.getCurrentNamePosition();
     }
   };
 
@@ -203,10 +213,10 @@
     }
   }; 
 
-  const renderAutocompleteForm = (data) => {
-    autocomplete.classList.add('show');
+  const renderSuggestionForm = (data) => {
+    suggestion.classList.add('show');
     if (!data) {
-      autocomplete.innerHTML = '<div class="suggest"><span>No matching address found.</span></div>';
+      suggestion.innerHTML = '<div class="suggest"><span>No matching address found.</span></div>';
     } else {
       const autocompleteData = data.features.map(item => 
         `<div class="suggest">
@@ -214,8 +224,8 @@
         </div>`
       ).join('');
 
-      mapBoxx.setTopSearchPosition(data.features[0]);
-      autocomplete.innerHTML = autocompleteData;
+      mapBox.setTopSearchPosition(data.features[0]);
+      suggestion.innerHTML = autocompleteData;
     }
   };
 
@@ -227,7 +237,8 @@
       ${data.features[0].properties.address ? `<p><span style="font-weight: bold">Address:</span> ${data.features[0].properties.address}</p>` : ''}
     `;
 
-    new mapboxgl.Popup()
+    new mapboxgl
+      .Popup()
       .setLngLat(location)
       .setHTML(html)
       .addTo(map);
@@ -251,21 +262,21 @@
     timeout = setTimeout(async () => {
       location = search.value;
       if (location === '') {
-        autocomplete.classList.remove('show');
+        suggestion.classList.remove('show');
         return;
       }
 
       const data = await getLocation(location);
-      renderAutocompleteForm(data);
+      renderSuggestionForm(data);
     }, 500);
   };
 
   const searchPosition = () => {
     if (!search.value) return;
 
-    let position = mapBoxx.getTopSearchPosition().center;
-    let place_type = mapBoxx.getTopSearchPosition().place_type;
-    flyToLocation(position, place_type);
+    let position = mapBox.getTopSearchPosition().center;
+    let type = mapBox.getTopSearchPosition().place_type;
+    flyToLocation(position, type);
   };
 
   const updateRoute = async () => {
@@ -292,10 +303,14 @@
     addRoute(data.matchings[0].geometry);
   };
 
+  const deleteDrawing = () => {
+    map.removeLayer('multiple-lines-layer');
+    map.removeSource('multiple-lines-layer')
+  };
+
   const addRoute = (coords) => {
     if (map.getSource('multiple-lines-layer')) {
-      map.removeLayer('multiple-lines-layer');
-      map.removeSource('multiple-lines-layer')
+      deleteDrawing();
     }
 
     const feature = {
@@ -336,8 +351,7 @@
       features.splice(index, 1);
 
       if (!features.length) {
-        map.removeLayer('multiple-lines-layer');
-        map.removeSource('multiple-lines-layer');
+        deleteDrawing();
         return;
       }
 
@@ -366,14 +380,14 @@
 
   window.onclick = (e) => {
     if (!e.target.matches('.searchTerm')) {
-      autocomplete.classList.remove('show');
+      suggestion.classList.remove('show');
     } else {
-      if (search.value) autocomplete.classList.add('show');
+      if (search.value) suggestion.classList.add('show');
     }
   };
 
   document.addEventListener('click', handleSearchSuggestion);
   search.addEventListener('keyup', onKeyupSearch);
   searchBtn.addEventListener('click', searchPosition);
-  currPositionBtn.addEventListener('click', backToCurrPosition);
+  currentPositionBtn.addEventListener('click', backToCurrentPosition);
 })();
