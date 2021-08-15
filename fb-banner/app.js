@@ -3,7 +3,7 @@
   const editBtn = document.querySelector('.edit-btn');
   const coverFileInput = document.querySelector('.cover-file');
   const coverPhoto = document.querySelector('.cover-photo');
-  const saveOrCancelBtn = document.querySelector('.cover-save');
+  const coverBtn = document.querySelector('.cover-save');
   const range = document.querySelector('#range');
   const rangeWrapper = document.querySelector('.range-wrap');
   const cancelBtn = document.querySelector('.cancel-btn');
@@ -17,9 +17,13 @@
     return JSON.parse(localStorage.getItem('photo'));
   };
 
+  const resizePhoto = (value) => {
+    rangeValue = value;
+    photo.style.width = 100 + rangeValue * 2 + '%';
+  };
+
   const scrollPhoto = () => {
-    photo.style.width = 100 + photoStored.width * 2 + '%';
-    rangeValue = photoStored.width;
+    resizePhoto(photoStored.width);
     range.value = rangeValue;
     coverPhoto.scrollLeft = photoStored.scrollLeft;
     coverPhoto.scrollTop = photoStored.scrollTop;
@@ -31,17 +35,26 @@
     scrollPhoto();
   };
 
+  const showEditBtn = () => {
+    editBtn.style.display = 'block';
+    uploadBtn.style.display = 'none';
+  };
+
+  const styleCoverEditBtn = (type) => {
+    coverBtn.style.display = type;
+    rangeWrapper.style.display = type;
+  };
+
   const init = () => {
     photoStored = getPhotoFromStorage();
     if (photoStored) {
-      editBtn.style.display = 'block';
-      uploadBtn.style.display = 'none';
       renderPhoto();
+      showEditBtn();
     }
   };
   init();
 
-  const callCoverFileInput = () => {
+  const onCoverFileInput = () => {
     coverFileInput.click();
   };
 
@@ -50,18 +63,12 @@
       let src = URL.createObjectURL(e.target.files[0]);
       coverPhoto.innerHTML = `<img class="photo" src="${src}" alt=""></img>`;
 
-      saveOrCancelBtn.style.display = 'block';
+      styleCoverEditBtn('block');
       uploadBtn.style.display = 'none';
-      rangeWrapper.style.display = 'block';
       range.value = 0;
       photo = document.querySelector('.photo');
       coverPhoto.addEventListener('mousedown', mouseDown);
     }
-  };
-
-  const resizePhoto = () => {
-    rangeValue = range.value;
-    photo.style.width = 100 + rangeValue * 2 + '%';
   };
 
   const mouseMove = (e) => {
@@ -91,17 +98,11 @@
   };
 
   const editPhoto = () => {
-    saveOrCancelBtn.style.display = 'block';
+    styleCoverEditBtn('block');
     uploadBtn.style.display = 'block';
     editBtn.style.display = 'none';
-    rangeWrapper.style.display = 'block';
     range.value = rangeValue;
     coverPhoto.addEventListener('mousedown', mouseDown);
-  };
-
-  const uneditPhoto = () => {
-    saveOrCancelBtn.style.display = 'none';
-    rangeWrapper.style.display = 'none';
   };
 
   const cancelUpload = () => {
@@ -114,12 +115,11 @@
       uploadBtn.style.display = 'block';
     } else {
       renderPhoto();
-      editBtn.style.display = 'block';
-      uploadBtn.style.display = 'none';
+      showEditBtn();
     }
 
     coverPhoto.removeEventListener('mousedown', mouseDown);
-    uneditPhoto();
+    styleCoverEditBtn('none');
   };
 
   const savePhoto = () => {
@@ -131,15 +131,14 @@
     };
 
     localStorage.setItem('photo', JSON.stringify(obj));
-    uneditPhoto();
-    editBtn.style.display = 'block';
-    uploadBtn.style.display = 'none';
+    styleCoverEditBtn('none');
+    showEditBtn();
     coverPhoto.removeEventListener('mousedown', mouseDown);
   };
 
-  range.addEventListener('input', resizePhoto);
+  range.addEventListener('input', e => resizePhoto(range.value));
   coverFileInput.addEventListener('change', uploadPhoto);
-  uploadBtn.addEventListener('click', callCoverFileInput);
+  uploadBtn.addEventListener('click', onCoverFileInput);
   editBtn.addEventListener('click', editPhoto);
   cancelBtn.addEventListener('click', cancelUpload);
   saveBtn.addEventListener('click', savePhoto);
