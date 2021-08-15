@@ -106,18 +106,18 @@ const data = [
 const container = document.querySelector('.stories-container');
 const stories = document.querySelector('.stories-slider');
 const content = document.querySelector('.story-content');
-const list = document.querySelector('.list-user');
-
+const listUser = document.querySelector('.list-user');
 const progressContainer = document.querySelector('.progress-container');
+
 let currProgressLine, currChildElementCount;
 
 const renderListUser = (data) => {
   for (let i = 0; i < data.length; i++) {
-    list.innerHTML += `
+    listUser.innerHTML += `
       <ul>
         <li>
           <div class="outer-layer">
-              <a href="#" onClick="changeStoriesOnList(${i})" href=""><img src="${data[i].avatar}" alt="user avatar"></a>
+              <a href="#" onClick="changeStoryOnList(${i})" href=""><img src="${data[i].avatar}" alt="user avatar"></a>
           </div>
         </li>
       </ul>
@@ -150,7 +150,7 @@ const renderListUser = (data) => {
 };
 renderListUser(data);
 
-const middle_of_story_screen = container.offsetLeft + stories.clientWidth / 2;
+const middleScreen = container.offsetLeft + stories.clientWidth / 2;
 const height = stories.clientHeight + 5;
 const width = stories.clientWidth;
 const pauseBtn = Array.from(document.querySelectorAll('.pause-icon'));
@@ -170,13 +170,13 @@ function playNext(e) {
   } 
 }
 
-const play = () => {
+const playStory = () => {
   progress[currProgressStory].classList.add('active');
   progress.map((el) => {
     el.addEventListener("animationend", playNext, false);
   });
 };
-play();
+playStory();
 
 const setDefaultProgress = (progress) => {
   if (progress.classList.contains('passed')) {
@@ -187,13 +187,13 @@ const setDefaultProgress = (progress) => {
   }
 };
 
-const removePassedProgess = () => {
+const removePassedProgress = () => {
   progress.forEach(item => {
     setDefaultProgress(item);
   });
 };
 
-const getIndexStoryPassed = () => {
+const getIndexPassedStory = () => {
   for (let i = progress.length - 1; i >= 0; i--) {
     if (progress[i].classList.contains('passed')) {
       return i;
@@ -207,7 +207,7 @@ const navigateToNextStory = (counter, element) => {
   element.style.transform = `translateY(${(-height * counter)}px)`;
 };
 
-const switchStoryUser = (index) => {
+const changeUserStory = (index) => {
   stories.style.transition = 'transform 0.4s ease-in-out';
   stories.style.transform = `translateX(${(-width * index)}px)`;
 };
@@ -220,12 +220,12 @@ const playVideo = (newVideo) => {
   }
 };
 
-const passedStory = (index) => {
+const setPassedStory = (index) => {
   progress[index].classList.remove('active');
   progress[index].classList.add('passed');
 };
 
-const activeStory = (index) => {
+const setActiveStory = (index) => {
   progress[index].classList.remove('passed');
   progress[index].classList.add('active');
 };
@@ -235,41 +235,41 @@ const changeVideo = () => {
   playVideo(currStory);
 };
 
-const changeStoriesOnList = (index) => {
-  setStoryRunning(pauseBtn[prevProgressStory]);
+const changeStoryOnList = (index) => {
+  setRunningStory(pauseBtn[prevProgressStory]);
   prevProgressStory = index;
   currStory = document.getElementById(`st${index + 1}`).firstElementChild;
   navigateToNextStory(0, currStory.parentElement);
-  switchStoryUser(index);
+  changeUserStory(index);
   progress = Array.from(document.querySelectorAll(`.prg-${index + 1}`));
-  removePassedProgess();
+  removePassedProgress();
   currProgressStory = 0;
-  play();
+  playStory();
 };
   
 const goToNextUser = (story) => {
   indexUser = getIndexUser(story.parentElement);
-  switchStoryUser(indexUser - 1);
+  changeUserStory(indexUser - 1);
   setStoryRunning(pauseBtn[indexUser - 2]);
-  passedStory(currProgressStory);
+  setPassedStory(currProgressStory);
   progress = Array.from(document.querySelectorAll(`.prg-${indexUser}`));
   currProgressStory = 0;
 
   if (progress[0].classList.contains('passed')) {
     navigateToNextStory(0, story.parentElement);
-    removePassedProgess();
+    removePassedProgress();
   }
 
-  play();
+  playStory();
 };
 
 const goToPrevUser = (story) => {
   indexUser = getIndexUser(story);
-  switchStoryUser(indexUser - 1);
+  changeUserStory(indexUser - 1);
   setStoryRunning(pauseBtn[indexUser]);
   progress[0].classList.remove('active');
   progress = Array.from(document.querySelectorAll(`.prg-${indexUser}`));
-  currProgressStory = getIndexStoryPassed();
+  currProgressStory = getIndexPassedStory();
 
   if (currProgressStory) {
     currStory = story.lastElementChild; 
@@ -278,13 +278,13 @@ const goToPrevUser = (story) => {
     currStory = story.firstElementChild;
   }
 
-  play();
+  playStory();
 };
 
 const nextStory = (story) => {
   handleStoryNavigation(story);
   currProgressStory += 1;
-  passedStory(currProgressStory - 1);
+  setPassedStory(currProgressStory - 1);
   progress[currProgressStory].classList.add('active');
 };
 
@@ -292,7 +292,7 @@ const prevStory = (story) => {
   handleStoryNavigation(story);
   currProgressStory -= 1;
   setDefaultProgress(progress[currProgressStory + 1]);
-  activeStory(currProgressStory);
+  setActiveStory(currProgressStory);
 };
 
 const handleStoryNavigation = (story) => {
@@ -319,7 +319,7 @@ const run = (currentPause) => {
   progress[currProgressStory].style.animationPlayState = 'running';
 };
 
-const setStoryRunning = (currentPause) => {
+const setRunningStory = (currentPause) => {
   if (currentPause.classList.contains('fa-play')) {
     run(currentPause);
   }
@@ -380,7 +380,7 @@ const changeStories = (direction) => {
 };
 
 const clickStories = (e) => {
-  changeStories(e.clientX > middle_of_story_screen ? 'next' : 'prev')
+  changeStories(e.clientX > middleScreen ? 'next' : 'prev')
 };
 
 stories.addEventListener('click', clickStories);
