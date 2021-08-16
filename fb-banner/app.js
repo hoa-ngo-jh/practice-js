@@ -8,10 +8,15 @@
   const rangeWrapper = document.querySelector('.range-wrap');
   const cancelBtn = document.querySelector('.cancel-btn');
   const saveBtn = document.querySelector('.save-btn');
+  const pos = { top: 0, left: 0, x: 0, y: 0 };
+  const photoStored = {
+    src: '',
+    scrollTop: 0,
+    scrollLeft: 0,
+    width: range.value
+  };
 
   let photo, rangeValue = 0;
-  let pos = { top: 0, left: 0, x: 0, y: 0 };
-  let photoStored = {};
 
   const getPhotoFromStorage = () => {
     return JSON.parse(localStorage.getItem('photo'));
@@ -46,8 +51,13 @@
   };
 
   const init = () => {
-    photoStored = getPhotoFromStorage();
-    if (photoStored) {
+    if (localStorage.getItem('photo')) {
+      let data = getPhotoFromStorage();
+      photoStored.src = data.src;
+      photoStored.scrollTop = data.scrollTop;
+      photoStored.scrollLeft = data.scrollLeft;
+      photoStored.width = data.width;
+
       renderPhoto();
       showEditBtn();
     }
@@ -122,15 +132,17 @@
     styleCoverEditBtn('none');
   };
 
-  const savePhoto = () => {
-    const obj = {
-      src: photo.src,
-      scrollTop: coverPhoto.scrollTop,
-      scrollLeft: coverPhoto.scrollLeft,
-      width: rangeValue
-    };
-
+  const saveToLocalStorage = (obj) => {
     localStorage.setItem('photo', JSON.stringify(obj));
+  };
+
+  const savePhoto = () => {
+    photoStored.src = photo.src;
+    photoStored.scrollTop = coverPhoto.scrollTop;
+    photoStored.scrollLeft = coverPhoto.scrollLeft;
+    photoStored.width = rangeValue;
+
+    saveToLocalStorage(photoStored);
     styleCoverEditBtn('none');
     showEditBtn();
     coverPhoto.removeEventListener('mousedown', mouseDown);

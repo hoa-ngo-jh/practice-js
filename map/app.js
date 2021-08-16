@@ -1,6 +1,6 @@
 (function() {
   // Edit variable name to make it easier to understand
-  const currentPositionBtn = document.querySelector('.nowBtn');
+  const currentPositionBtn = document.querySelector('.now-btn');
   const search = document.querySelector('.search-input');
   const searchBtn = document.querySelector('.fa-search');
   const suggestion = document.querySelector('.suggestion');

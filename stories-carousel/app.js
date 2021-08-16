@@ -250,7 +250,7 @@ const changeStoryOnList = (index) => {
 const goToNextUser = (story) => {
   indexUser = getIndexUser(story.parentElement);
   changeUserStory(indexUser - 1);
-  setStoryRunning(pauseBtn[indexUser - 2]);
+  setRunningStory(pauseBtn[indexUser - 2]);
   setPassedStory(currProgressStory);
   progress = Array.from(document.querySelectorAll(`.prg-${indexUser}`));
   currProgressStory = 0;
@@ -266,7 +266,7 @@ const goToNextUser = (story) => {
 const goToPrevUser = (story) => {
   indexUser = getIndexUser(story);
   changeUserStory(indexUser - 1);
-  setStoryRunning(pauseBtn[indexUser]);
+  setRunningStory(pauseBtn[indexUser]);
   progress[0].classList.remove('active');
   progress = Array.from(document.querySelectorAll(`.prg-${indexUser}`));
   currProgressStory = getIndexPassedStory();
@@ -299,7 +299,7 @@ const handleStoryNavigation = (story) => {
   indexUser = getIndexUser(story.parentElement);
   index = story.getAttribute('id');
 
-  setStoryRunning(pauseBtn[indexUser - 1]);
+  setRunningStory(pauseBtn[indexUser - 1]);
   navigateToNextStory(index - 1, story.parentElement);
 };
 
