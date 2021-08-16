@@ -1,75 +1,83 @@
 const carouselSlide = document.querySelector('.carousel-slide');
 const carouselImages = document.querySelectorAll('.carousel-slide img');
-const prevBtn = document.querySelector('#prevBtn');
-const nextBtn = document.querySelector('#nextBtn');
+const prevBtn = document.querySelector('#prev-btn');
+const nextBtn = document.querySelector('#next-btn');
 const dotsContainer = document.querySelector('#my-dot');
 const size = carouselImages[0].clientWidth + 1;
+const dotIndex = {
+  newIndex: 0,
+  oldIndex: 0
+};
 
 let counter = 1;
 
 carouselSlide.style.transform = `translateX(${(-size * counter)}px)`;
 
-nextBtn.addEventListener('click', () => {
+const nextSlide = (second) => {
   if (counter >= carouselImages.length - 1) return;
-  let newIndexDot = (counter == 5 ? 0 : counter) + 1;
-  let oldIndexDot = counter;
-  counter++;
-  changeSlide();
-  changeDotBackground(oldIndexDot, newIndexDot);
-});
+  dotIndex.newIndex = (counter == 5 ? 0 : counter) + 1;
+  dotIndex.oldIndex = counter;
+  handleChangeSlide(1, second);
+};
 
-prevBtn.addEventListener('click', () => {
+const prevSlide = (second) => {
   if (counter <= 0) return;
-  let newIndexDot = (counter == 1 ? 6 : counter) - 1;
-  let oldIndexDot = counter;
-  counter--;
-  changeSlide();
-  changeDotBackground(oldIndexDot, newIndexDot);
-});
+  dotIndex.newIndex = (counter == 1 ? 6 : counter) - 1;
+  dotIndex.oldIndex = counter;
+  handleChangeSlide(-1, second);
+}
 
-function createDot() {
+const handleChangeSlide = (direction, second) => {
+  counter += direction;
+  changeSlide(second);
+  changeDotBackground(dotIndex.oldIndex, dotIndex.newIndex);
+};
+
+const createDot = () => {
   for (let i = 0; i < carouselImages.length - 2; i++) {
     if (i != 0) {
-      dotsContainer.innerHTML += `<span class="dot" onclick="changeSlideByDot(${i + 1})"></span> `;
+      dotsContainer.innerHTML += `<span class="dot" onclick="changeSlideByDot(${i + 1}, 0.4)"></span> `;
     } else {
-      dotsContainer.innerHTML += `<span class="dot active" onclick="changeSlideByDot(${i + 1})"></span> `;
+      dotsContainer.innerHTML += `<span class="dot active" onclick="changeSlideByDot(${i + 1}, 0.4)"></span> `;
     }
   }
-}
+};
 createDot();
 const dots = document.querySelectorAll('.dot');
 
-function changeSlide() {
-  carouselSlide.style.transition = 'transform 0.4s ease-in-out';
+const changeSlide = (second) => {
+  carouselSlide.style.transition = `transform ${second}s ease-in-out`;
   carouselSlide.style.transform = `translateX(${(-size * counter)}px)`;
-}
+};
 
-function changeSlideWithoutAnimation() {
+const changeSlideWithoutAnimation = () => {
   carouselSlide.style.transition = "none";
   carouselSlide.style.transform = `translateX(${(-size * counter)}px)`;
-}
+};
 
-function changeDotBackground (oldIndexDot, newIndexDot) {
+const changeDotBackground = (oldIndexDot, newIndexDot) => {
   dots[oldIndexDot - 1].classList.remove('active');
   dots[newIndexDot - 1].classList.add('active');
-}
+};
 
-function changeSlideByDot(newIndexDot) {
-  let oldIndexDot = counter;
+const changeSlideByDot = (newIndexDot, second) => {
+  dotIndex.oldIndex = counter;
   counter = newIndexDot;
-  changeSlide();
-  changeDotBackground(oldIndexDot, newIndexDot);
-}
+  changeSlide(second);
+  changeDotBackground(dotIndex.oldIndex, newIndexDot);
+};
 
-function handleSlideTransition() {
-  if (carouselImages[counter].id === 'lastClone') {
+const handleSlideTransition = () => {
+  if (carouselImages[counter].id === 'last-clone') {
     counter = carouselImages.length - 2;
   }
-  if (carouselImages[counter].id === 'firstClone') {
+  if (carouselImages[counter].id === 'first-clone') {
     counter = carouselImages.length - counter;
   }
 
   changeSlideWithoutAnimation();
-}
+};
 
+nextBtn.addEventListener('click', () => nextSlide(0.4));
+prevBtn.addEventListener('click', () => prevSlide(0.4));
 carouselSlide.addEventListener('transitionend', handleSlideTransition);

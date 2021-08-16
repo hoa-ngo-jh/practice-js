@@ -20,8 +20,8 @@
   height: 500px;
 }
 
-#prevBtn,
-#nextBtn {
+#prev-btn,
+#next-btn {
   position: absolute;
   top: 50%;
   z-index: 10;
@@ -50,10 +50,10 @@
   background-color: #a7a7a7;
 }
 
-#prevBtn {
+#prev-btn {
   left: 3%;
 }
 
-#nextBtn {
+#next-btn {
   right: 3%;
 }
