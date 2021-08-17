@@ -1,0 +1,17 @@
+** So sánh Arrow Function vs Function Declarations
+  1. ‘this’ and ‘arguments’
+     - Arrow function không có this và arguments object của riêng nó, có nghĩa là this và arguments trong arrow function sẽ tham chiếu tới scope cha, kế thừa các giá trị từ scope cha.
+     - This trong function declarations sẽ tham chiếu tới đối tượng mà nó thuộc về.
+       + Trong một function, 'this' tham chiếu tới đối tượng toàn cục (window/global object).
+       + Trong một method, 'this' tham chiếu tới đối tượng chủ.
+  2. Khởi tạo một instance
+    Ta có thể khởi tạo một object với function declaration với từ khoá new. Nhưng arrow function thì không
+
+  3. Các function declarations được hoisted lên trên top của JS, trước khi những dòng code được thực thi. Có nghĩa là mình được phép gọi function ngay cả trước khi khai báo function đó.
+  Còn arrow function sẽ không được hoisted lên top như function declarations.
+
+** Trường hợp sử dụng
+  Ta có thể lựa chọn 1 trong 2 để khai báo function bình thường, nhưng sẽ phải chú ý một vài trường hợp sau:
+  - Sử dụng Arrow function khi không cần tạo một instance từ function. Có thể sử dụng Arrow function trong các hàm không cần dùng this. Không nên sử dụng arrow để khai báo một method có sử dụng this ở trong một Object, vì lúc này this sẽ tham chiếu tới outer scope (trường hợp này là window).
+
+  - Sử dụng Function declarations khi ta muốn sử dụng function trước khi khai báo nó. Khi ta muốn sử dụng một function như là một constructor.
