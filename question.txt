@@ -9,6 +9,8 @@
 
   3. Các function declarations được hoisted lên trên top của JS, trước khi những dòng code được thực thi. Có nghĩa là mình được phép gọi function ngay cả trước khi khai báo function đó.
   Còn arrow function sẽ không được hoisted lên top như function declarations.
+  Do đó nếu chương trình sử dụng rất nhiều function declarations thì có khả năng các function này sẽ được đưa vào bộ nhớ trước khi sử dụng. gây lãng phí và trong nhiều trường hợp sẽ không cần thiết.
+  Arrow function đã giúp ta hạn chế được điều này, nó sẽ chỉ được thực thi khi chương trình chạy tới nó, tiết kiệm bộ nhớ hơn so với function declarations.
 
 ** Trường hợp sử dụng
   Ta có thể lựa chọn 1 trong 2 để khai báo function bình thường, nhưng sẽ phải chú ý một vài trường hợp sau:

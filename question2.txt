@@ -1,0 +1,3 @@
+Where should new parameter be added in the function that already has old parameter?
+  We should add a new param in the last. Because if that function only uses old parameters until we want to add a new param, that's mean if every current usage only passed old parameters, we can at least give it a default value. We don't have to change all the calls.
+  If we put new param in the first or other position, we have to change every single call to that function. So we should put a new param in the last.
